@@ -617,6 +617,46 @@
   }
 }
 
+/* Blinking. Each friend's eyes are one shared group (Eyes in Characters.jsx),
+   squashed around the skeleton's face line at y = 78 — identical for all five,
+   so no character carries its own blink geometry. The delays spread the cycle
+   so the cast never blinks in lockstep, which would read as a glitch rather
+   than as life. Closed for ~0.3s of a 6.5s cycle approximates a human blink. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes char-blink {
+    0%,
+    92%,
+    100% {
+      transform: scaleY(1);
+    }
+    94.5% {
+      transform: scaleY(0.08);
+    }
+    97% {
+      transform: scaleY(1);
+    }
+  }
+
+  .char-eyes {
+    transform-origin: 100px 78px;
+    animation: char-blink 6.5s ease-in-out infinite;
+  }
+
+  [data-friend='benny'] .char-eyes { animation-delay: 0s; }
+  [data-friend='mimi'] .char-eyes { animation-delay: 1.3s; }
+  [data-friend='oliver'] .char-eyes { animation-delay: 2.6s; }
+  [data-friend='pip'] .char-eyes { animation-delay: 3.9s; }
+  [data-friend='tilly'] .char-eyes { animation-delay: 5.2s; }
+
+  /* The nav's motion toggle stops it, like every other loop on the page. The
+     footer's cast sits outside <main> (where the class lives), so :has() is
+     what keeps the sign-off friends from blinking while everything else rests. */
+  .is-motion-paused .char-eyes,
+  body:has(.is-motion-paused) .char-eyes {
+    animation-play-state: paused;
+  }
+}
+
 .pillars {
   list-style: none;
   padding: 0;

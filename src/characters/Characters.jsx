@@ -59,14 +59,24 @@ const Head = ({ fill }) => (
   <circle cx={HEAD.cx} cy={HEAD.cy} r={HEAD.r} fill={fill} stroke={OUTLINE} strokeWidth={STROKE} />
 );
 
+/**
+ * The eyes, shared by all five friends so the blink is authored once. The CSS
+ * squashes this group around the skeleton's face line (y = 78) — the same
+ * origin for every character, so species differences never leak into the rig.
+ * Tilly passes her own size because spectacles shrink the eye to fit.
+ */
+const Eyes = ({ r = 5.5, glint = 1.9, glintOffset = 1.5 }) => (
+  <g className="char-eyes">
+    <circle cx={84} cy={78} r={r} fill={OUTLINE} />
+    <circle cx={116} cy={78} r={r} fill={OUTLINE} />
+    <circle cx={84 - glintOffset} cy={78 - glintOffset} r={glint} fill="var(--cream)" />
+    <circle cx={116 - glintOffset} cy={78 - glintOffset} r={glint} fill="var(--cream)" />
+  </g>
+);
+
 const Face = ({ cheekOpacity = 0.5 }) => (
   <>
-    <g>
-      <circle cx={84} cy={78} r={5.5} fill={OUTLINE} />
-      <circle cx={116} cy={78} r={5.5} fill={OUTLINE} />
-      <circle cx={82.5} cy={76.5} r={1.9} fill="var(--cream)" />
-      <circle cx={114.5} cy={76.5} r={1.9} fill="var(--cream)" />
-    </g>
+    <Eyes />
     <g fill="var(--coral)" opacity={cheekOpacity}>
       <circle cx={70} cy={94} r={7} />
       <circle cx={130} cy={94} r={7} />
@@ -85,7 +95,7 @@ const Face = ({ cheekOpacity = 0.5 }) => (
 
 export function Benny(props) {
   return (
-    <svg viewBox="0 0 200 240" role="img" aria-label="Benny the Bear" {...props}>
+    <svg viewBox="0 0 200 240" role="img" aria-label="Benny the Bear" data-friend="benny" {...props}>
       <Shadow />
       <Bag fill="var(--butter)" />
       <Body fill="var(--brown)" />
@@ -121,7 +131,7 @@ export function Mimi(props) {
     </g>
   );
   return (
-    <svg viewBox="0 0 200 240" role="img" aria-label="Mimi the Bunny" {...props}>
+    <svg viewBox="0 0 200 240" role="img" aria-label="Mimi the Bunny" data-friend="mimi" {...props}>
       <Shadow />
       <Bag fill="var(--coral)" />
       <Body fill="var(--cream)" />
@@ -147,7 +157,7 @@ export function Mimi(props) {
 
 export function Oliver(props) {
   return (
-    <svg viewBox="0 0 200 240" role="img" aria-label="Oliver the Fox" {...props}>
+    <svg viewBox="0 0 200 240" role="img" aria-label="Oliver the Fox" data-friend="oliver" {...props}>
       <Shadow />
       <Bag fill="var(--sage)" />
       <Body fill="var(--coral)" />
@@ -177,7 +187,7 @@ export function Oliver(props) {
 
 export function Pip(props) {
   return (
-    <svg viewBox="0 0 200 240" role="img" aria-label="Pip the Penguin" {...props}>
+    <svg viewBox="0 0 200 240" role="img" aria-label="Pip the Penguin" data-friend="pip" {...props}>
       <Shadow />
       <Bag fill="var(--sky)" />
       <Body fill="var(--cocoa)" />
@@ -203,7 +213,7 @@ export function Pip(props) {
 
 export function Tilly(props) {
   return (
-    <svg viewBox="0 0 200 240" role="img" aria-label="Tilly the Turtle" {...props}>
+    <svg viewBox="0 0 200 240" role="img" aria-label="Tilly the Turtle" data-friend="tilly" {...props}>
       <Shadow />
       {/* shell sits behind everything and reads as her silhouette */}
       <ellipse cx={BODY.cx} cy={168} rx={62} ry={58} fill="var(--sage)" stroke={OUTLINE} strokeWidth={STROKE} />
@@ -227,12 +237,7 @@ export function Tilly(props) {
         <circle cx={116} cy={78} r={12} />
         <path d="M96 78 L104 78" />
       </g>
-      <g>
-        <circle cx={84} cy={78} r={4.5} fill={OUTLINE} />
-        <circle cx={116} cy={78} r={4.5} fill={OUTLINE} />
-        <circle cx={82.7} cy={76.7} r={1.6} fill="var(--cream)" />
-        <circle cx={114.7} cy={76.7} r={1.6} fill="var(--cream)" />
-      </g>
+      <Eyes r={4.5} glint={1.6} glintOffset={1.3} />
       <g fill="var(--coral)" opacity={0.55}>
         <circle cx={66} cy={98} r={6.5} />
         <circle cx={134} cy={98} r={6.5} />
