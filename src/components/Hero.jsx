@@ -20,16 +20,19 @@ export default function Hero() {
           <p className="hero__lede">{heroCopy.lede}</p>
 
           <div className="hero__actions">
-            <a className="btn btn--lg" href={heroCopy.primary.href}>
-              {heroCopy.primary.label} <span aria-hidden="true">→</span>
+            <a className="btn btn--lg" href="#enrol">
+              Enquire about admission <span aria-hidden="true">→</span>
             </a>
-            <a className="btn btn--coral btn--lg" href={heroCopy.secondary.href}>
-              {heroCopy.secondary.label}
+            <a className="btn btn--quiet btn--lg" href={`tel:${school.phoneHref}`}>
+              Call the school
             </a>
           </div>
 
           <p className="hero__call">
-            Or call <a href={`tel:${school.phoneHref}`}>{school.phone}</a>
+            Or message us on{' '}
+            <a href={school.whatsappHref} target="_blank" rel="noreferrer">
+              WhatsApp
+            </a>
           </p>
         </div>
 

@@ -1,10 +1,11 @@
 const ITEMS = [
   'Preschool',
   'Wakad · Pimpri-Chinchwad',
-  'Opens 9:00 am Monday',
+  // Opening hours are stated once, in the Visit section — repeating an
+  // incomplete statement here drew attention to the gap instead of the facts.
   '4.7 from 60 Google reviews',
   'Behind Murari Petrolpump',
-  'Full weekly hours unconfirmed',
+  'Play · Learn · Discover · Grow',
 ]
 
 /**

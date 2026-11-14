@@ -93,6 +93,15 @@ export default function HeroScene(props) {
           <circle cx={110} cy={358} r={6} fill="var(--coral)" />
         </g>
 
+        {/* background layer: smaller, lighter trees behind the school */}
+        <g opacity="0.85">
+          <rect x={146} y={252} width={9} height={48} rx={4} fill="var(--brown)" />
+          <circle cx={150} cy={232} r={22} fill="var(--sage)" />
+          <circle cx={130} cy={248} r={13} fill="var(--sage)" />
+          <rect x={424} y={248} width={9} height={52} rx={4} fill="var(--brown)" />
+          <circle cx={428} cy={228} r={20} fill="var(--sage)" />
+        </g>
+
         {/* school building */}
         <g>
           <rect x={172} y={182} width={216} height={118} rx={10} fill="var(--peach)" stroke={OUTLINE} strokeWidth={S} />
@@ -175,6 +184,23 @@ export default function HeroScene(props) {
             </g>
             <ellipse cx={0} cy={0} rx={1.8} ry={4.5} fill={OUTLINE} />
           </g>
+        </g>
+        {/* foreground plane: a darker strip drawn after the friends, so they
+            stand *behind* something. That occlusion is what reads as depth. */}
+        <g>
+          <rect x={0} y={372} width={560} height={28} fill="var(--sage)" />
+          <rect x={0} y={372} width={560} height={28} fill="var(--cocoa)" opacity={0.12} />
+          <g stroke="var(--cocoa)" strokeWidth={2.4} strokeLinecap="round">
+            <line x1={40} y1={392} x2={40} y2={370} />
+            <line x1={96} y1={392} x2={96} y2={374} />
+            <line x1={506} y1={392} x2={506} y2={372} />
+          </g>
+          <circle cx={40} cy={366} r={8} fill="var(--coral)" />
+          <circle cx={96} cy={370} r={6.5} fill="var(--butter)" />
+          <circle cx={506} cy={368} r={7.5} fill="var(--lavender)" />
+          {/* a ball left on the grass */}
+          <circle cx={452} cy={384} r={11} fill="var(--coral)" stroke={OUTLINE} strokeWidth={2.4} />
+          <path d="M442 379 q10 6 20 0" fill="none" stroke={OUTLINE} strokeWidth={2.4} />
         </g>
       </svg>
     </div>

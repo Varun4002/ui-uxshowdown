@@ -1,4 +1,5 @@
-import { faq } from '../data/school.js'
+import { Tilly } from '../characters/Characters.jsx'
+import { faq, school } from '../data/school.js'
 
 /**
  * FAQ accordion built on native <details>/<summary>: keyboard operable and
@@ -10,15 +11,28 @@ export default function Faq() {
   return (
     <section className="section faq" id="faq" aria-labelledby="faq-title">
       <div className="shell faq__inner">
-        <header className="section__head faq__head">
-          <p className="eyebrow">
-            <span className="rule" aria-hidden="true" />
-            {faq.eyebrow}
+        <div className="faq__aside">
+          <header className="section__head faq__head">
+            <p className="eyebrow">
+              <span className="rule" aria-hidden="true" />
+              {faq.eyebrow}
+            </p>
+            <h2 id="faq-title" className="section__title">
+              {faq.title}
+            </h2>
+          </header>
+
+          {/* Tilly keeps the books — the natural guide to a questions section. */}
+          <div className="faq__host" aria-hidden="true">
+            <Tilly focusable="false" />
+            <p className="faq__bubble">Ask us anything</p>
+          </div>
+
+          <p className="faq__more">
+            Still unsure? Call{' '}
+            <a href={`tel:${school.phoneHref}`}>{school.phone}</a>
           </p>
-          <h2 id="faq-title" className="section__title">
-            {faq.title}
-          </h2>
-        </header>
+        </div>
 
         <div className="faq__list">
           {faq.items.map((item) => (

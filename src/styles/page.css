@@ -142,12 +142,45 @@
 
 @media (max-width: 62rem) {
   .nav__links,
-  .nav__cta {
+  .nav__cta,
+  /* The motion toggle does not fit a phone-width pill, and the marquee is the
+     only thing it pauses. It returns in the mobile menu instead. */
+  .nav__motion {
+    display: none;
+  }
+
+  .nav__brand-meta {
     display: none;
   }
 
   .nav__toggle {
     display: inline-flex;
+    margin-inline-start: auto;
+  }
+
+  /* Measured: the toggle sat ~150px outside the pill at 320–430px because the
+     brand refused to shrink. min-width:0 lets it ellipsis instead. */
+  .nav__brand {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .nav__brand-en {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav__mascot {
+    width: 2.1rem;
+    height: 2.5rem;
+  }
+
+  .nav__toggle {
+    padding: 0.5rem 0.8rem;
+    min-height: 2.75rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
   }
 
   .nav[data-open="true"] .nav__menu {
@@ -174,6 +207,12 @@
     background: var(--butter);
   }
 
+  .nav[data-open="true"] .nav__menu .nav__menu-motion {
+    justify-content: flex-start;
+    padding: var(--s-2) var(--s-3);
+    font-family: var(--font-ui);
+  }
+
   .nav[data-open="true"] .nav__menu .nav__menu-cta {
     background: var(--cocoa);
     color: var(--cream);
@@ -189,7 +228,7 @@
 
 .hero__inner {
   display: grid;
-  grid-template-columns: 1.35fr 1fr;
+  grid-template-columns: 1.25fr 1fr;
   align-items: center;
   gap: clamp(1.5rem, 3vw, 3.5rem);
 }
@@ -657,6 +696,56 @@
   transform: translateY(-1px);
 }
 
+.program__intro {
+  font-size: var(--step--1);
+}
+
+.program__label {
+  margin-top: var(--s-1);
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Example activities read as chips, so they are not mistaken for a published
+   curriculum. */
+.program__activities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1);
+}
+
+.program__activities li {
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--r-pill);
+  background: rgb(255 245 230 / 75%);
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+}
+
+.program__activities li::before {
+  display: none;
+}
+
+.program__cta {
+  margin-top: var(--s-1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: var(--step--1);
+  color: var(--cocoa);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.program__cta:hover {
+  text-decoration: underline;
+}
+
 /* Only verified details get published: ages stay flagged until the school
    confirms them. */
 .program__pending {
@@ -668,6 +757,34 @@
   border-top: 1px dashed var(--line);
   padding-top: var(--s-2);
   margin-top: var(--s-1);
+}
+
+/* ---------- Card grid (feed band) ---------- */
+
+.cards {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--s-3);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.cards .card {
+  display: grid;
+  align-content: start;
+  gap: var(--s-1);
+}
+
+.cards .card h3 {
+  font-size: var(--step-card);
+}
+
+.card__index {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text-soft);
 }
 
 /* ---------- Community band ---------- */
@@ -808,55 +925,148 @@
   }
 }
 
-/* ---------- Contact band ---------- */
+/* ---------- Visit (the closing section) ----------
+   Butter, not Ink: the ending should read as a warm invitation, and it keeps the
+   footer from becoming one long dark block. */
 
-.contact {
-  background: var(--surface-deep);
-  color: var(--text-invert);
+.visit {
+  background: var(--butter);
 }
 
-.contact__inner {
+.visit__grid {
   display: grid;
-  justify-items: start;
-  gap: var(--s-3);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
 }
 
-.contact__eyebrow {
-  color: var(--butter);
+@media (max-width: 62rem) {
+  .visit__grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.contact__phone {
+.visit__card {
+  display: grid;
+  align-content: center;
+  gap: var(--s-2);
+  background: var(--surface-plate);
+  border-radius: var(--r-xl);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  box-shadow: var(--shadow-float);
+}
+
+.visit__label {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cocoa);
+}
+
+/* The number is the loudest thing here on purpose: for a preschool, a parent
+   ready to call is the conversion. */
+.visit__phone {
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 1.2rem + 5.5vw, 5rem);
+  font-size: clamp(1.75rem, 1rem + 3.4vw, 3rem);
   font-weight: 600;
   line-height: 1;
   text-decoration: none;
-  color: var(--butter);
+  color: var(--cocoa);
 }
 
-.contact__phone:hover {
+.visit__phone:hover {
   text-decoration: underline;
   text-decoration-thickness: 0.06em;
-  text-underline-offset: 0.14em;
+  text-underline-offset: 0.12em;
 }
 
-.contact__note {
-  font-family: var(--font-ui);
-  font-size: var(--step--1);
-  color: rgb(255 245 230 / 78%);
-}
-
-.contact__actions {
+.visit__actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-2);
   margin-top: var(--s-2);
 }
 
-.btn--quiet-light {
-  --_bg: transparent;
-  --_fg: var(--butter);
-  border-color: rgb(255 245 230 / 40%);
+.visit__note {
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  color: var(--cocoa);
+}
+
+/* Brown is AA on the white card (4.80:1); on Butter it would not be. */
+.visit__card .visit__note {
+  color: var(--text-soft);
+}
+
+.visit__info {
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  align-content: start;
+}
+
+.visit__block {
+  display: grid;
+  gap: var(--s-1);
+  align-content: start;
+}
+
+.visit__block h3 {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cocoa);
+}
+
+.visit__address {
+  display: grid;
+  gap: 2px;
+  font-style: normal;
+  font-size: var(--step--1);
+}
+
+.visit__hours {
+  font-family: var(--font-display);
+  font-size: var(--step-card);
+}
+
+.visit__link {
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--cocoa);
+}
+
+.visit__checklist {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--s-5);
+  display: grid;
+  gap: var(--s-2);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  border-top: 1px solid rgb(73 56 47 / 15%);
+  padding-top: var(--s-3);
+}
+
+.visit__checklist li {
+  display: flex;
+  gap: var(--s-2);
+  align-items: baseline;
+  font-size: var(--step--1);
+}
+
+.visit__checklist li::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--coral);
+  transform: translateY(-1px);
 }
 
 /* ---------- Footer ---------- */
@@ -872,6 +1082,27 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
   gap: var(--s-5);
+}
+
+.footer__name {
+  font-family: var(--font-display);
+  font-size: var(--step-card);
+  margin-bottom: var(--s-1);
+}
+
+.footer__nav {
+  display: grid;
+  gap: var(--s-1);
+}
+
+.footer__nav a {
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  text-decoration: none;
+}
+
+.footer__nav a:hover {
+  text-decoration: underline;
 }
 
 .footer__title {
@@ -909,8 +1140,8 @@
 }
 
 .footer__link {
-  display: inline-block;
-  margin-top: var(--s-2);
+  display: block;
+  margin-top: var(--s-1);
   font-family: var(--font-ui);
   font-size: var(--step--1);
   color: var(--cream);
@@ -1083,6 +1314,18 @@
 .day__item[data-active]::before {
   background: var(--cocoa);
   border-color: var(--cocoa);
+}
+
+.day__head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.day__avatar {
+  width: 2.6rem;
+  height: auto;
+  flex: none;
 }
 
 .day__time {
@@ -1357,4 +1600,312 @@
   padding-block: var(--s-1) var(--s-2);
   font-size: var(--step--1);
   color: var(--text-soft);
+}
+
+.footer__link--lead {
+  font-family: var(--font-display);
+  font-size: var(--step-card);
+  font-weight: 600;
+}
+
+/* Storybook sign-off: the five friends see you out. */
+.footer__cast {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-top: var(--s-6);
+  padding-top: var(--s-4);
+  border-top: 1px solid rgb(255 245 230 / 25%);
+}
+
+.footer__cast-label {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(255 245 230 / 78%);
+}
+
+.footer__cast ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: var(--s-2);
+}
+
+.footer__cast li {
+  width: 3.25rem;
+}
+
+.footer__cast svg {
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- Cast walk band ----------
+   Three friends on a dashed ground line: a light transition between content
+   blocks that keeps the character system present without adding a section. */
+
+.walk-band {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--s-4);
+  padding-block: var(--s-4);
+  border-block: 1px dashed var(--line-soft);
+}
+
+.walk-band svg {
+  width: clamp(3rem, 6vw, 4.5rem);
+  height: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .walk-band svg {
+    animation: walker-bob 2.6s ease-in-out infinite alternate;
+  }
+
+  .walk-band svg:nth-child(2) { animation-delay: -0.8s; }
+  .walk-band svg:nth-child(3) { animation-delay: -1.6s; }
+}
+
+.reviews__notice {
+  margin-top: var(--s-3);
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  color: var(--cocoa);
+}
+
+/* ---------- School spaces ---------- */
+
+.spaces__grid {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--s-3);
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.space {
+  display: grid;
+  align-content: start;
+  background: var(--surface-plate);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lift);
+}
+
+/* Each illustration sits on its own tint, so the four read as a set. */
+.space__art {
+  padding: var(--s-3);
+}
+
+.space__art--sky { background: var(--sky); }
+.space__art--lavender { background: var(--lavender); }
+.space__art--butter { background: var(--butter); }
+.space__art--sage { background: var(--sage); }
+
+.space__art svg {
+  width: 100%;
+  height: auto;
+  border-radius: var(--r-md);
+}
+
+.space__body {
+  display: grid;
+  gap: var(--s-1);
+  padding: var(--s-3) var(--s-4) var(--s-4);
+}
+
+.space__body h3 {
+  font-size: var(--step-card);
+}
+
+.space__body p {
+  font-size: var(--step--1);
+}
+
+.spaces__note {
+  margin-top: var(--s-3);
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  color: var(--cocoa);
+}
+
+/* Safety: equal-height tiles with a consistent internal rhythm. */
+.safety__tile {
+  grid-template-rows: auto auto 1fr;
+}
+
+.safety__tile h3 {
+  font-size: var(--step-card);
+}
+
+/* ---------- Feed band: medallions + follow CTA ---------- */
+
+.card__medallion {
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  margin-bottom: var(--s-1);
+}
+
+.card__medallion svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.community__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-top: var(--s-4);
+}
+
+.community__meta {
+  margin-top: 0;
+}
+
+/* ---------- FAQ: the host illustration ---------- */
+
+.faq__aside {
+  display: grid;
+  gap: var(--s-3);
+  align-content: start;
+}
+
+.faq__host {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-2);
+}
+
+.faq__host svg {
+  width: clamp(6rem, 12vw, 8.5rem);
+  height: auto;
+  flex: none;
+}
+
+/* Speech bubble with a tail, in the same plate language as the cards. */
+.faq__bubble {
+  position: relative;
+  margin-bottom: var(--s-4);
+  padding: var(--s-2) var(--s-3);
+  background: var(--surface-plate);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lift);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step--1);
+  white-space: nowrap;
+}
+
+.faq__bubble::after {
+  content: "";
+  position: absolute;
+  inset-block-end: -0.5rem;
+  inset-inline-start: 1.1rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  background: var(--surface-plate);
+  border-inline-end: 1px solid var(--line-soft);
+  border-block-end: 1px solid var(--line-soft);
+  transform: rotate(45deg);
+}
+
+.faq__more {
+  font-size: var(--step--1);
+}
+
+/* ---------- Enrolment: steps + host ---------- */
+
+.enrol__steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--s-2);
+  counter-reset: step;
+}
+
+.enrol__steps li {
+  position: relative;
+  padding-inline-start: var(--s-4);
+  counter-increment: step;
+}
+
+.enrol__steps li::before {
+  content: counter(step);
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.1rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--butter);
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.enrol__steps h3 {
+  font-size: var(--step--1);
+  font-family: var(--font-ui);
+  font-weight: 700;
+}
+
+.enrol__steps p {
+  font-size: var(--step--1);
+  color: var(--cocoa);
+}
+
+.enrol__host {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+}
+
+.enrol__host svg {
+  width: clamp(5rem, 10vw, 7rem);
+  height: auto;
+  flex: none;
+}
+
+.enrol__bubble {
+  position: relative;
+  margin-bottom: var(--s-3);
+  padding: var(--s-2) var(--s-3);
+  background: var(--surface-plate);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lift);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step--1);
+}
+
+.enrol__bubble::after {
+  content: "";
+  position: absolute;
+  inset-block-end: -0.45rem;
+  inset-inline-start: 1rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  background: var(--surface-plate);
+  border-inline-end: 1px solid var(--line-soft);
+  border-block-end: 1px solid var(--line-soft);
+  transform: rotate(45deg);
 }

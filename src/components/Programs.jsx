@@ -16,6 +16,10 @@ export default function Programs() {
           <h2 id="programs-title" className="section__title">
             Little Steps, Big Discoveries
           </h2>
+          <p className="lede">
+            Three groups, one rhythm: the youngest are eased in, the middle explores
+            outward, and the oldest get ready for big school.
+          </p>
         </header>
 
         <ul className="programs">
@@ -28,17 +32,33 @@ export default function Programs() {
                 style={{ background: TONES[program.tone] }}
               >
                 <div className="program__head">
-                  <friend.Component aria-hidden="true" />
+                  <friend.Component aria-hidden="true" focusable="false" />
                   <h3>{program.name}</h3>
                 </div>
-                <ul>
-                  {program.bullets.map((line) => (
+
+                <p className="program__intro">{program.intro}</p>
+
+                <p className="program__label">What they work on</p>
+                <ul className="program__objectives">
+                  {program.objectives.map((line) => (
                     <li key={line}>{line}</li>
                   ))}
                 </ul>
+
+                <p className="program__label">Example activities</p>
+                <ul className="program__activities">
+                  {program.activities.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+
                 {program.agesVerified ? null : (
                   <p className="program__pending">Age range to be confirmed</p>
                 )}
+
+                <a className="program__cta" href="#enrol">
+                  Ask about {program.name} <span aria-hidden="true">→</span>
+                </a>
               </li>
             )
           })}

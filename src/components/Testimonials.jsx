@@ -86,6 +86,8 @@ export default function Testimonials() {
             ))}
           </ul>
         </div>
+
+        <p className="reviews__notice">{testimonials.sampleNotice}</p>
       </div>
     </section>
   )

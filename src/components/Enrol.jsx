@@ -1,5 +1,6 @@
 import { useId } from 'react'
-import { copy } from '../data/school.js'
+import { Benny } from '../characters/Characters.jsx'
+import { copy, enrolSteps } from '../data/school.js'
 
 /**
  * Enrolment form. Native constraint validation only — `required` + type=email
@@ -41,7 +42,22 @@ export default function Enrol({ onFieldFocus, onFieldBlur, onSubmitted, success 
           <p className="lede">
             Come and see the rooms, meet the teachers, and ask anything you like.
           </p>
+
+          <ol className="enrol__steps">
+            {enrolSteps.map((step) => (
+              <li key={step.title}>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </li>
+            ))}
+          </ol>
+
           <p className="enrol__note">{copy.formNote}</p>
+
+          <div className="enrol__host" aria-hidden="true">
+            <Benny focusable="false" />
+            <p className="enrol__bubble">See you soon</p>
+          </div>
         </div>
 
         <form
@@ -100,10 +116,11 @@ export default function Enrol({ onFieldFocus, onFieldBlur, onSubmitted, success 
           </div>
 
           {/* The owl's spin and confetti are decoration. This is the part a
-              screen reader can actually perceive, so it is not optional. */}
+              screen reader can actually perceive, so it is not optional.
+              There is no backend: this must never claim a real submission. */}
           <p className="enrol__success" role="status">
             {success
-              ? 'Thank you — we will be in touch. (Demo: nothing was sent.)'
+              ? 'Demo only — nothing was sent. To reach the school, call or WhatsApp +91 92720 99011.'
               : ''}
           </p>
         </form>

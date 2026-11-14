@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import CastWalk from './components/CastWalk.jsx'
 import Community from './components/Community.jsx'
 import Confetti from './components/Confetti.jsx'
 import Contact from './components/Contact.jsx'
@@ -11,6 +12,7 @@ import Marquee from './components/Marquee.jsx'
 import Nav from './components/Nav.jsx'
 import Programs from './components/Programs.jsx'
 import Safety from './components/Safety.jsx'
+import Spaces from './components/Spaces.jsx'
 import Testimonials from './components/Testimonials.jsx'
 import Welcome from './components/Welcome.jsx'
 
@@ -44,6 +46,8 @@ export default function App() {
         <Marquee />
         <Welcome />
         <Programs />
+        <Spaces />
+        <CastWalk />
         <DayTimeline />
         <Safety />
         <Testimonials />

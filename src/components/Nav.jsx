@@ -62,6 +62,14 @@ export default function Nav({ paused, onToggleMotion }) {
         <a className="nav__menu-cta" href="#enrol" onClick={() => setOpen(false)}>
           Book a School Visit
         </a>
+        {/* Still reachable on phones, where it is hidden from the pill. */}
+        <button
+          type="button"
+          className="btn btn--quiet nav__menu-motion"
+          onClick={onToggleMotion}
+        >
+          {paused ? 'Play motion' : 'Pause motion'}
+        </button>
       </div>
     </header>
   )

@@ -24,7 +24,9 @@ export default function Welcome() {
         <ul className="cast" aria-label="Our little friends">
           {CAST.map((friend) => (
             <li key={friend.animal}>
-              <friend.Component />
+              {/* The caption below names the friend, so the illustration is
+                  decorative here — otherwise it is announced twice. */}
+              <friend.Component aria-hidden="true" focusable="false" />
               <span className="cast__name">{friend.name.split(' the ')[0]}</span>
             </li>
           ))}

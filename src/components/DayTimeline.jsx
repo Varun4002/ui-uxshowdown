@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Benny } from '../characters/Characters.jsx'
+import { CAST } from '../characters/cast.js'
 import { day } from '../data/school.js'
+
+const byAnimal = Object.fromEntries(CAST.map((friend) => [friend.animal, friend]))
 
 /**
  * The daily rhythm as a vertical timeline with the mascot riding alongside.
@@ -75,8 +78,18 @@ export default function DayTimeline() {
                   nodes.current[index] = el
                 }}
               >
-                <span className="day__time">{block.time}</span>
-                <h3>{block.label}</h3>
+                <div className="day__head">
+                  {(() => {
+                    const Friend = byAnimal[block.animal]?.Component
+                    return Friend ? (
+                      <Friend className="day__avatar" aria-hidden="true" focusable="false" />
+                    ) : null
+                  })()}
+                  <div>
+                    <span className="day__time">{block.time}</span>
+                    <h3>{block.label}</h3>
+                  </div>
+                </div>
                 <p>{block.body}</p>
               </li>
             ))}
