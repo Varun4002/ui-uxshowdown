@@ -1,0 +1,96 @@
+/* Design tokens — "Little Wonder" storybook system.
+   Contrast pairs are measured in colour_pallete.md; read it before adding a hue. */
+
+:root {
+  /* Warm storybook palette — exactly nine hues */
+  --cream: #fff5e6;
+  --peach: #ffd6b8;
+  --butter: #ffe89a;
+  --sage: #b9d7b0;
+  --sky: #b8ddf5;
+  --coral: #f49a83;
+  --lavender: #d9c9f2;
+  --cocoa: #49382f;
+  --brown: #806f64;
+
+  /* Controlled exception to the nine-hue system: requested for the safety
+     iconography. It only ever appears as a tile FILL behind cocoa glyphs
+     (5.13:1). As a stroke on cream it is 2.01:1 and fails. */
+  --teal: #2ec4b6;
+
+  /* Surfaces. The page base is warm cream — never pure white. */
+  --surface: var(--cream);
+  --surface-plate: #fff;          /* card plates; brown text is AA here (4.80:1) */
+  --surface-deep: var(--cocoa);   /* dark bands */
+
+  /* Text roles. Cocoa reads on every pastel (5.18–10.29:1). Brown is secondary
+     text on white plates only (4.80:1) — on cream it is 4.45 and passes only at
+     large size. */
+  --text: var(--cocoa);
+  --text-soft: var(--brown);
+  --text-invert: var(--cream);
+
+  /* Accents. Coral is a fill/illustration colour — 1.99:1 as text on cream. */
+  --accent: var(--coral);
+  --highlight: var(--butter);
+
+  --line: rgb(128 111 100 / 45%);
+  --line-soft: rgb(128 111 100 / 24%);
+
+  /* Type */
+  --font-display: "Fredoka", ui-rounded, system-ui, sans-serif;
+  --font-body: "Nunito Sans", system-ui, sans-serif;
+  --font-ui: "Nunito", system-ui, sans-serif;
+  --font-devanagari: "Baloo 2", system-ui, sans-serif; /* Hindi only */
+
+  /* Hierarchy from the brief: hero 44–76, section 34–48, card 22–28,
+     body 16–18, labels 13–14. No thin weights anywhere. */
+  --step-hero: clamp(2.75rem, 1.9rem + 3.9vw, 4.75rem);
+  --step-section: clamp(2.125rem, 1.75rem + 1.7vw, 3rem);
+  --step-card: clamp(1.375rem, 1.3rem + 0.4vw, 1.75rem);
+  --step-0: clamp(1rem, 0.96rem + 0.19vw, 1.125rem);
+  --step--1: clamp(0.8125rem, 0.8rem + 0.08vw, 0.875rem);
+
+  /* Spacing: 8px base stepped through Fibonacci — 8, 13, 21, 34, 55, 89, 144.
+     Ratios between neighbours sit near 1.618 without forcing it everywhere. */
+  --s-1: 0.5rem;
+  --s-2: 0.8125rem;
+  --s-3: 1.3125rem;
+  --s-4: 2.125rem;
+  --s-5: 3.4375rem;
+  --s-6: 5.5625rem;
+  --s-7: 9rem;
+
+  /* Layout: content width 1180–1280; section spacing 32–48 mobile, 72–112 desktop */
+  --shell-max: 78.75rem;
+  --gutter: clamp(1.25rem, 1rem + 2vw, 2.5rem);
+  --section-y: clamp(2rem, 1rem + 3.4vw, 7rem);
+  --nav-h: 4.75rem;
+
+  /* Shape: 20–32px radii for surfaces, larger for organic illustration frames */
+  --r-sm: 0.75rem;
+  --r-md: 1.25rem;
+  --r-lg: 1.75rem;
+  --r-xl: 2rem;
+  --r-pill: 999px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 160ms;
+  --dur-slow: 520ms;
+
+  --shadow-lift:
+    0 2px 4px rgb(73 56 47 / 8%), 0 16px 32px -16px rgb(73 56 47 / 22%);
+  --shadow-float:
+    0 6px 12px -4px rgb(73 56 47 / 16%), 0 22px 44px -18px rgb(73 56 47 / 26%);
+
+  --ring-color: var(--cocoa);
+  --ring-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur-slow: 1ms;
+  }
+}

@@ -1,0 +1,50 @@
+/* App-level layout only.
+   The shared page and component layout lives in styles/page.css, already on the
+   five-hue palette in colour_pallete.md. Everything shared is left to that file
+   on purpose — main.jsx imports styles/* before App.jsx imports App.css, so any
+   selector defined in both resolves to this file, and duplicating a rule here
+   silently retires the other implementation's version of it.
+
+   Rule of thumb: add a rule here only when page.css has no equivalent. */
+
+/* The hero uses a narrow text column beside a fixed-width owl slot, whereas
+   page.css's .hero__inner is a two-column ratio grid for a different markup. */
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--gap-xl);
+}
+
+.hero__copy > * + * {
+  margin-top: var(--gap-md);
+}
+
+@media (max-width: 62rem) {
+  .hero__grid {
+    grid-template-columns: 1fr;
+    gap: var(--gap-lg);
+  }
+
+  .hero__copy > * + * {
+    margin-top: var(--gap-sm);
+  }
+}
+
+/* page.css supplies the rating pill's surface; the caption scale and UI face are
+   additive here, because ui.md puts small chrome on Inter rather than Nunito.
+   Pine on white is 8.79:1, so --text-muted stays legible inside the pill. */
+.hero__rating {
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  color: var(--text-muted);
+}
+
+/* ui.md: "Inputs: white, 2px mauve border, Pine border on focus-visible."
+   page.css ships a 1px border, so the contract is restored here rather than
+   silently accepted — the difference is visible at normal zoom. */
+.field input,
+.field select,
+.field textarea {
+  border-width: 2px;
+}

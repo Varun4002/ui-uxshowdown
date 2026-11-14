@@ -1,0 +1,151 @@
+/* Owl rig styling.
+   Fills are drawn only from the five hues in colour_pallete.md, via tokens.css:
+   Ink body, Blush belly, Pine beak and active wing, Mauve feet. No hex is
+   written here.
+
+   Every animated declaration is either `transform` or a colour, so frames stay
+   on the compositor. The engine owns three custom properties on the root
+   element (--owl-pupil-x, --owl-pupil-y, --owl-head-rot) and rewrites them at
+   most once per animation frame; everything below only consumes them. */
+
+.owl {
+  /* Fixed layer: the engine positions this element with a single translate3d
+     plus scale, so it can fly between the hero and the nav with no layout. */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 15rem;
+  /* Matches the 140x152 viewBox, so the rig never letterboxes. */
+  height: 16.2857rem;
+  overflow: visible;
+  z-index: 60;
+  /* Never intercept clicks — the mascot is decorative and must not sit on top
+     of a CTA or form field. */
+  pointer-events: none;
+  will-change: transform;
+  /* The engine translates by the element's top-left and then scales, so the
+     origin must be the top-left. With the default 50% 50% origin the scale
+     re-centres the element and every translate lands half-scaled off target. */
+  transform-origin: 0 0;
+  /* Parked off-screen until the engine writes the first transform, so the owl
+     cannot flash at the top-left corner before hydration. */
+  transform: translate3d(-50vw, -50vh, 0);
+}
+
+.owl__body,
+.owl__tuft,
+.owl__hand {
+  fill: var(--ink);
+}
+
+.owl__belly {
+  fill: var(--blush);
+}
+
+/* Pearl eye whites are gone with the old palette; Blush sclera on an Ink body
+   keeps the eyes legible with no sixth colour. */
+.owl__socket {
+  fill: var(--blush);
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+
+.owl__pupil {
+  fill: var(--ink);
+  transform: translate(var(--owl-pupil-x, 0px), var(--owl-pupil-y, 0px));
+}
+
+/* The catchlight is the one part that must NOT inherit the pupil's Ink, or it
+   disappears into the pupil. Blush is the only light hue available. */
+.owl__pupil-glint {
+  fill: var(--blush);
+}
+
+.owl__beak {
+  fill: var(--pine);
+}
+
+/* Head tilt. The transform-box/origin pair is what makes a CSS rotation pivot
+   on the neck rather than on the SVG's own origin. */
+.owl__head {
+  transform: rotate(var(--owl-head-rot, 0deg));
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+/* ---------- Pointing wing ----------
+   The right wing's long axis is vertical, so rotating it by (target angle - 90)
+   aims that axis at the focused field. Pine marks the active state — and the
+   wing also changes fill and angle, because colour alone must not carry it. */
+
+.owl__wing {
+  fill: var(--ink);
+  transform-box: fill-box;
+  transform-origin: 50% 12%;
+  transition: fill var(--dur-fast) linear;
+}
+
+/* Rest pose: no rotation. The angle must NOT live on the base rule, or the wing
+   keeps the last pointing angle forever and sticks out sideways in every other
+   state (it looked like a fin glued to the head during peekaboo). */
+.owl__wing--right {
+  transform: rotate(0deg);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    fill var(--dur-fast) linear;
+}
+
+.owl--pointing .owl__wing--right {
+  transform: rotate(var(--owl-wing-rot, 0deg));
+  fill: var(--pine);
+}
+
+/* ---------- Peekaboo ----------
+   The paws are authored at the base of the body (cy 131), where they read as
+   paws against the Ink silhouette. At rest they therefore need NO offset — the
+   previous version translated them further down, which pushed them outside the
+   body and, because `.owl` clips nothing, left two detached blobs floating
+   under the owl. Peekaboo lifts them to the eye line (cy 70). */
+
+.owl__hand {
+  stroke: var(--blush);
+  stroke-width: 3;
+  /* Invisible at rest: parked at the base of the silhouette the paws read as a
+     pair of detached feet. They rise and fade in for peekaboo. */
+  opacity: 0;
+  transform: translateY(0) scale(1);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) linear;
+}
+
+.owl--peekaboo .owl__hand {
+  /* 131 → 70 in viewBox units, and scaled up so the paw covers the socket. */
+  transform: translateY(-3.8rem) scale(1.45);
+  opacity: 1;
+}
+
+/* ---------- Celebration ---------- */
+
+@keyframes owl-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .owl--celebrate .owl__head {
+    animation: owl-spin 720ms var(--ease-out);
+  }
+}
+
+/* Under reduce the spin is dropped entirely rather than shortened, so the owl
+   simply holds its resting pose. */
+@media (prefers-reduced-motion: reduce) {
+  .owl__wing--right,
+  .owl__hand {
+    transition: none;
+  }
+}

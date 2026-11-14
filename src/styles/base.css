@@ -1,0 +1,265 @@
+@import "./fonts.css";
+@import "./tokens.css";
+
+/* ---------- Reset ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* ---------- Type ---------- */
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--step-hero);
+}
+h2 {
+  font-size: var(--step-section);
+}
+h3 {
+  font-size: var(--step-card);
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Baloo 2 is the only Devanagari face on the stack. */
+[lang="hi"] {
+  font-family: var(--font-devanagari);
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.22em;
+}
+
+code {
+  font-family: var(--font-ui);
+  font-size: 0.95em;
+}
+
+/* ---------- Focus ---------- */
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--ring-color);
+  outline-offset: var(--ring-offset);
+  border-radius: var(--r-sm);
+}
+
+/* ---------- Layout ---------- */
+
+.shell {
+  width: min(100% - 2 * var(--gutter), var(--shell-max));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--section-y);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cocoa);
+}
+
+.rule {
+  display: inline-block;
+  width: 2.25rem;
+  height: 2px;
+  flex: none;
+  border-radius: var(--r-pill);
+  background: var(--coral);
+}
+
+.lede {
+  font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem);
+  line-height: 1.6;
+  max-width: 34rem;
+}
+
+/* ---------- Scroll-driven reveals ----------
+   Decorative only: progressive enhancement, no JS fallback. The
+   `animation-range` check filters browsers with only partial support. */
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes reveal-up {
+      entry 0% {
+        opacity: 0;
+        transform: translateY(2.5rem);
+      }
+      entry 100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .reveal {
+      /* `animation` first: the shorthand resets animation-timeline/range. */
+      animation: reveal-up linear backwards;
+      animation-timeline: view();
+      animation-range: entry 5% entry 55%;
+    }
+  }
+}
+
+/* Print: no scroll, so view()-driven keyframes would resolve at entry 0% and
+   hide every revealed section on paper. */
+@media print {
+  .reveal {
+    animation: none;
+  }
+}
+
+/* ---------- Buttons ----------
+   Squish on press, soft lift on hover; cocoa fill with cream label is 10.29:1. */
+
+.btn {
+  --_bg: var(--cocoa);
+  --_fg: var(--cream);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-1);
+  padding: 0.85rem 1.6rem;
+  border: 2px solid transparent;
+  border-radius: var(--r-pill);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) linear,
+    box-shadow var(--dur-fast) linear;
+}
+
+.btn--quiet {
+  --_bg: transparent;
+  --_fg: var(--cocoa);
+  border-color: var(--brown);
+}
+
+/* Coral fill is only AA (5.18:1) with cocoa text — never cream on coral. */
+.btn--coral {
+  --_bg: var(--coral);
+  --_fg: var(--cocoa);
+}
+
+/* Butter on cocoa is 9.13:1, for dark bands. */
+.btn--light {
+  --_bg: var(--butter);
+  --_fg: var(--cocoa);
+}
+
+.btn--quiet-light {
+  --_bg: transparent;
+  --_fg: var(--butter);
+  border-color: rgb(255 245 230 / 40%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+  }
+}
+
+/* Squish: the press feedback the brief asks for. */
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn--lg {
+  padding: 1rem 1.85rem;
+  font-size: var(--step-0);
+}
+
+/* ---------- Cards ---------- */
+
+.card {
+  background: var(--surface-plate);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  padding: var(--s-4);
+  box-shadow: var(--shadow-lift);
+}
+
+/* ---------- Utility ---------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
