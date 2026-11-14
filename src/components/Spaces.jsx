@@ -93,7 +93,7 @@ const SCENES = {
 
 export default function Spaces() {
   return (
-    <section className="section spaces" id="spaces" aria-labelledby="spaces-title">
+    <section className="section band--tint spaces" id="spaces" aria-labelledby="spaces-title">
       <div className="shell">
         <header className="section__head">
           <p className="eyebrow">

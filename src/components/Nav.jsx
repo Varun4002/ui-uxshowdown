@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Benny } from '../characters/Characters.jsx'
 import { school, theme } from '../data/school.js'
 
@@ -9,6 +9,33 @@ import { school, theme } from '../data/school.js'
  */
 export default function Nav({ paused, onToggleMotion }) {
   const [open, setOpen] = useState(false)
+  const [active, setActive] = useState('#top')
+
+  // Which section is under the middle of the viewport. One observer, no scroll
+  // handler, so the nav never costs a frame while scrolling.
+  useEffect(() => {
+    const targets = theme.nav
+      .map((item) => document.querySelector(item.href))
+      .filter(Boolean)
+    if (!targets.length) return undefined
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting)
+        if (!visible.length) return
+        const nearest = visible.reduce((best, entry) =>
+          Math.abs(entry.boundingClientRect.top) < Math.abs(best.boundingClientRect.top)
+            ? entry
+            : best
+        )
+        setActive(`#${nearest.target.id}`)
+      },
+      { rootMargin: '-45% 0px -50% 0px' }
+    )
+
+    targets.forEach((target) => observer.observe(target))
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <header className="nav" data-open={open || undefined}>
@@ -24,7 +51,11 @@ export default function Nav({ paused, onToggleMotion }) {
 
         <nav className="nav__links" aria-label="Primary">
           {theme.nav.map((item) => (
-            <a key={item.href} href={item.href}>
+            <a
+              key={item.href}
+              href={item.href}
+              aria-current={active === item.href ? 'page' : undefined}
+            >
               {item.label}
             </a>
           ))}

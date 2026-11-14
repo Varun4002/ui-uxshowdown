@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import useReducedMotion from '../hooks/useReducedMotion.js'
 import { school, testimonials } from '../data/school.js'
 
@@ -11,6 +11,22 @@ import { school, testimonials } from '../data/school.js'
 export default function Testimonials() {
   const railRef = useRef(null)
   const reduced = useReducedMotion()
+  const [index, setIndex] = useState(0)
+
+  const goTo = useCallback(
+    (next) => {
+      const rail = railRef.current
+      if (!rail) return
+      const card = rail.querySelectorAll('.review')[next]
+      if (!card) return
+      setIndex(next)
+      rail.scrollTo({
+        left: card.offsetLeft - rail.offsetLeft,
+        behavior: reduced ? 'auto' : 'smooth',
+      })
+    },
+    [reduced]
+  )
 
   const nudge = useCallback(
     (direction) => {
@@ -85,6 +101,19 @@ export default function Testimonials() {
               </li>
             ))}
           </ul>
+        </div>
+
+        <div className="reviews__dots">
+          {testimonials.items.map((item, i) => (
+            <button
+              key={item.author}
+              type="button"
+              className="reviews__dot"
+              aria-current={i === index}
+              aria-label={`Show review ${i + 1} of ${testimonials.items.length}`}
+              onClick={() => goTo(i)}
+            />
+          ))}
         </div>
 
         <p className="reviews__notice">{testimonials.sampleNotice}</p>

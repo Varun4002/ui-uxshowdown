@@ -114,8 +114,13 @@
   transition: transform var(--dur-fast) var(--ease-out);
 }
 
-.nav__links a:hover::after {
+.nav__links a:hover::after,
+.nav__links a[aria-current="page"]::after {
   transform: scaleX(1);
+}
+
+.nav__links a[aria-current="page"] {
+  color: var(--cocoa);
 }
 
 .nav__cta {
@@ -578,16 +583,38 @@
   text-align: center;
 }
 
-/* Gentle per-character bob, offset so they never move in lockstep. */
+/* The five friends greet one after another, then rest before the next round:
+   Benny, Mimi, Oliver, Pip, Tilly. */
 @media (prefers-reduced-motion: no-preference) {
-  .cast li svg {
-    animation: walker-bob 3s ease-in-out infinite alternate;
+  @keyframes cast-greet {
+    0%,
+    18%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    5% {
+      transform: translateY(-7px) rotate(-5deg);
+    }
+    11% {
+      transform: translateY(-3px) rotate(4deg);
+    }
   }
 
-  .cast li:nth-child(2) svg { animation-delay: -0.6s; }
-  .cast li:nth-child(3) svg { animation-delay: -1.2s; }
-  .cast li:nth-child(4) svg { animation-delay: -1.8s; }
-  .cast li:nth-child(5) svg { animation-delay: -2.4s; }
+  .cast.is-waving li svg {
+    transform-origin: 50% 100%;
+    animation: cast-greet 5.6s var(--ease-out) infinite;
+  }
+
+  .cast.is-waving li:nth-child(1) svg { animation-delay: 0s; }
+  .cast.is-waving li:nth-child(2) svg { animation-delay: 0.44s; }
+  .cast.is-waving li:nth-child(3) svg { animation-delay: 0.88s; }
+  .cast.is-waving li:nth-child(4) svg { animation-delay: 1.32s; }
+  .cast.is-waving li:nth-child(5) svg { animation-delay: 1.76s; }
+
+  /* The nav's motion toggle pauses it too. */
+  .is-motion-paused .cast li svg {
+    animation-play-state: paused;
+  }
 }
 
 .pillars {
@@ -643,9 +670,9 @@
 .program {
   border-radius: var(--r-xl);
   padding: var(--s-4);
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: var(--s-2);
-  align-content: start;
   transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) linear;
 }
 
@@ -730,7 +757,8 @@
 }
 
 .program__cta {
-  margin-top: var(--s-1);
+  margin-top: auto;
+  padding-top: var(--s-2);
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -757,6 +785,14 @@
   border-top: 1px dashed var(--line);
   padding-top: var(--s-2);
   margin-top: var(--s-1);
+}
+
+/* ---------- Section rhythm ----------
+   Consecutive same-colour sections read as one long scroll. These two bands
+   separate the middle of the page using a tint of an existing hue. */
+
+.band--tint {
+  background: rgb(255 214 184 / 32%);
 }
 
 /* ---------- Card grid (feed band) ---------- */
@@ -1277,7 +1313,8 @@
   padding: 0;
   margin: 0;
   display: grid;
-  gap: var(--s-2);
+  /* No gap: the left border of each node becomes one continuous timeline. */
+  gap: 0;
 }
 
 .day__item {
@@ -1831,16 +1868,20 @@
 
 .enrol__steps {
   list-style: none;
-  padding: 0;
+  padding: var(--s-3);
   margin: 0;
   display: grid;
-  gap: var(--s-2);
+  gap: var(--s-3);
   counter-reset: step;
+  /* Grouped as a panel so the steps read as one idea, not three loose lines. */
+  background: rgb(255 255 255 / 55%);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
 }
 
 .enrol__steps li {
   position: relative;
-  padding-inline-start: var(--s-4);
+  padding-inline-start: var(--s-5);
   counter-increment: step;
 }
 
@@ -1848,9 +1889,9 @@
   content: counter(step);
   position: absolute;
   inset-inline-start: 0;
-  inset-block-start: 0.1rem;
-  width: 1.6rem;
-  height: 1.6rem;
+  inset-block-start: 0.05rem;
+  width: 1.9rem;
+  height: 1.9rem;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -1861,7 +1902,7 @@
 }
 
 .enrol__steps h3 {
-  font-size: var(--step--1);
+  font-size: var(--step-0);
   font-family: var(--font-ui);
   font-weight: 700;
 }
@@ -1908,4 +1949,124 @@
   border-inline-end: 1px solid var(--line-soft);
   border-block-end: 1px solid var(--line-soft);
   transform: rotate(45deg);
+}
+
+/* ---------- Review indicators ---------- */
+
+.reviews__dots {
+  display: flex;
+  gap: var(--s-1);
+  justify-content: center;
+  margin-top: var(--s-3);
+}
+
+.reviews__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--line);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) linear, transform var(--dur-fast) var(--ease-out);
+}
+
+.reviews__dot[aria-current="true"] {
+  background: var(--cocoa);
+  transform: scale(1.25);
+}
+
+/* Comfortable hit area without changing the dot's look. */
+.reviews__dot::after {
+  content: "";
+  display: block;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin: -0.5rem;
+}
+
+/* ---------- Form errors ----------
+   Errors appear only after the user has interacted, via the native
+   `:user-invalid` state — no error on page load, none while first typing.
+   `:is()` keeps the rule alive if a browser lacks the pseudo-class: in a plain
+   selector list one unsupported selector would drop the whole rule. */
+
+.form-error {
+  display: none;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  /* Cocoa, not red: the palette is fixed and coral fails as text on cream.
+     The coral marker carries the "attention" without hurting contrast. */
+  color: var(--cocoa);
+}
+
+.form-error::before {
+  content: "!";
+  display: inline-grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--coral);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.field :is(input, select, textarea):user-invalid {
+  border-color: var(--cocoa);
+  border-width: 2px;
+}
+
+.field :is(input, select, textarea):user-invalid + .form-error {
+  display: flex;
+}
+
+/* Form header: gives the card a top edge instead of starting at a label. */
+.enrol__formhead {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 0.15rem;
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.enrol__formhead h3 {
+  font-size: var(--step-card);
+}
+
+.enrol__formhead p {
+  font-size: var(--step--1);
+  color: var(--text-soft);
+}
+
+.day__host {
+  font-family: var(--font-ui);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cocoa);
+  opacity: 0.75;
+}
+
+/* Each stage change brings a new character in. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes host-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.94);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .day__mascot svg.day__benny {
+    animation: host-in 320ms var(--ease-out);
+  }
 }

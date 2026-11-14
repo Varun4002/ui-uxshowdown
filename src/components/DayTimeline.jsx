@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
-import { Benny } from '../characters/Characters.jsx'
 import { CAST } from '../characters/cast.js'
 import { day } from '../data/school.js'
 
 const byAnimal = Object.fromEntries(CAST.map((friend) => [friend.animal, friend]))
 
 /**
- * The daily rhythm as a vertical timeline with the mascot riding alongside.
+ * The daily rhythm as a vertical timeline, with the mascot riding alongside.
  *
- * The mascot tracks the schedule through an IntersectionObserver that picks the
- * node nearest the middle of the viewport — no scroll listener, no polling. It
- * shows the child where they are in the day without hijacking the scroll, and
- * every node still carries its own time and text, so the bubble is decoration.
+ * The mascot changes to whoever owns the active stage — Benny greets, Oliver
+ * discovers, Pip runs, Mimi winds down — so scrolling the day walks you through
+ * the cast instead of staring at one character. Tracking uses an
+ * IntersectionObserver that picks the node nearest the middle of the viewport: no
+ * scroll listener, no polling.
  */
 export default function DayTimeline() {
   const [active, setActive] = useState(0)
@@ -44,6 +44,8 @@ export default function DayTimeline() {
   }, [])
 
   const current = day.blocks[active] ?? day.blocks[0]
+  const Host = byAnimal[current.animal]?.Component ?? CAST[0].Component
+  const hostName = byAnimal[current.animal]?.name.split(' the ')[0] ?? 'Benny'
 
   return (
     <section className="section day" id="day" aria-labelledby="day-title">
@@ -64,35 +66,37 @@ export default function DayTimeline() {
             <div className="day__bubble">
               <span className="day__clock">{current.time}</span>
               <span className="day__stage">{current.label}</span>
+              <span className="day__host">with {hostName}</span>
             </div>
-            <Benny className="day__benny" focusable="false" />
+            {/* Keyed so each stage change plays the little entrance. */}
+            <Host className="day__benny" key={current.animal} focusable="false" />
           </aside>
 
           <ol className="day__list">
-            {day.blocks.map((block, index) => (
-              <li
-                className="day__item"
-                key={block.label}
-                data-active={index === active || undefined}
-                ref={(el) => {
-                  nodes.current[index] = el
-                }}
-              >
-                <div className="day__head">
-                  {(() => {
-                    const Friend = byAnimal[block.animal]?.Component
-                    return Friend ? (
+            {day.blocks.map((block, index) => {
+              const Friend = byAnimal[block.animal]?.Component
+              return (
+                <li
+                  className="day__item"
+                  key={block.label}
+                  data-active={index === active || undefined}
+                  ref={(el) => {
+                    nodes.current[index] = el
+                  }}
+                >
+                  <div className="day__head">
+                    {Friend ? (
                       <Friend className="day__avatar" aria-hidden="true" focusable="false" />
-                    ) : null
-                  })()}
-                  <div>
-                    <span className="day__time">{block.time}</span>
-                    <h3>{block.label}</h3>
+                    ) : null}
+                    <div>
+                      <span className="day__time">{block.time}</span>
+                      <h3>{block.label}</h3>
+                    </div>
                   </div>
-                </div>
-                <p>{block.body}</p>
-              </li>
-            ))}
+                  <p>{block.body}</p>
+                </li>
+              )
+            })}
           </ol>
         </div>
       </div>

@@ -160,7 +160,7 @@ code {
       /* `animation` first: the shorthand resets animation-timeline/range. */
       animation: reveal-up linear backwards;
       animation-timeline: view();
-      animation-range: entry 5% entry 55%;
+      animation-range: entry 0% entry 30%;
     }
   }
 }

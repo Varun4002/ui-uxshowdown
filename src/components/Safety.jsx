@@ -44,7 +44,7 @@ const ICONS = {
 
 export default function Safety() {
   return (
-    <section className="section safety" id="safety" aria-labelledby="safety-title">
+    <section className="section band--tint safety" id="safety" aria-labelledby="safety-title">
       <div className="shell">
         <header className="section__head">
           <p className="eyebrow">
